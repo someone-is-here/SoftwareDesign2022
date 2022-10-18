@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.math.BigDecimal
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNav : BottomNavigationView
@@ -53,12 +55,10 @@ class MainActivity : AppCompatActivity() {
         bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
 
         bottomNav.setOnNavigationItemSelectedListener {
-            Log.i("mko","bottomNavListener" + it.itemId.toString())
             when (it.itemId) {
                 R.id.currency -> {
                     loadFragment(CurrencyFragment())
                     setChooseMenu(R.array.currency)
-                    Log.i("mko", "Load chosen currency")
                     initInput()
                     return@setOnNavigationItemSelectedListener true
                     //return@setOnNavigationItemReselectedListener
@@ -66,14 +66,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.distance -> {
                     loadFragment(DistanceFragment())
                     setChooseMenu(R.array.distance)
-                    Log.i("mko", "Load chosen distance")
                     initInput()
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.weight -> {
                     loadFragment(WeightFragment())
                     setChooseMenu(R.array.weight)
-                    Log.i("mko", "Load chosen weight")
                     initInput()
                     return@setOnNavigationItemSelectedListener true
                 }
@@ -88,16 +86,12 @@ class MainActivity : AppCompatActivity() {
         loadFragment(CurrencyFragment())
         setChooseMenu(R.array.currency)
 
-        Log.i("mko", "Load default currency")
-
         if(savedInstanceState != null){
-            Log.i("mko", "NOT NULL STATE" + savedInstanceState.getInt("opened_fragment"))
             bottomNav.selectedItemId = savedInstanceState.getInt("opened_fragment")
         }
 
         initInput()
     }
-
     private fun setButtonsListeners(){
         findViewById<Button>(R.id.btnPaste1).visibility = View.INVISIBLE
         findViewById<Button>(R.id.btnCopy1).visibility = View.INVISIBLE
@@ -274,12 +268,10 @@ class MainActivity : AppCompatActivity() {
     }
     private fun update(){
         if(inputFrom.isNotEmpty() && isActiveInputFrom){
-            val res = (inputFrom.toDouble() * convertibleValues[convertFrom]!!) / (convertibleValues[convertTo]!!)
-            inputTo = res.toString()
+            Formatter.BigDecimalLayoutForm.SCIENTIFIC
+            val res = (inputFrom.toBigDecimal()) * (convertibleValues[convertFrom]!! / convertibleValues[convertTo]!!).toBigDecimal()
+            inputTo = res.toPlainString()
             output.text = inputTo
-            if(res >= 10000000){
-                Toast.makeText(this, "Possible loss of accuracy", LENGTH_LONG).show()
-            }
         }
     }
     fun onDigit(view: View) {
@@ -348,6 +340,9 @@ class MainActivity : AppCompatActivity() {
         if(isActiveInputTo){
             inputTo = ""
             output.text = inputTo
+            isActiveInputFrom = true
+            update()
+            isActiveInputFrom = false
         }
     }
     fun onDelete(view: View) {
@@ -367,6 +362,9 @@ class MainActivity : AppCompatActivity() {
         update()
     }
     fun onSwap(view: View) {
+        isActiveInputFrom = true
+        isActiveInputTo = false
+
         val res = inputFrom
 
         inputFrom = inputTo
@@ -385,5 +383,3 @@ class MainActivity : AppCompatActivity() {
         update()
     }
 }
-
-// TODO: Restriction on digits?
