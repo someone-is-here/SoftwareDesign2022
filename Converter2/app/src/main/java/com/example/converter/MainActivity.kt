@@ -1,18 +1,22 @@
 package com.example.converter
 
-import android.annotation.SuppressLint
-import android.graphics.PorterDuff
+import android.content.ClipData
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.text.ClipboardManager
 import android.util.Log
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.math.BigDecimal
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     private var isActiveInputFrom = false
     private var isActiveInputTo = false
 
-    private var savedCopy: String = ""
     private var profMode: Boolean = false
 
     private var nightMode: Boolean = false
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         "t" to 1000.0, "q" to 100.0,
         "st" to 6.3503, "lb" to 0.4536
     )
+
+    private lateinit var clipboardManager: android.content.ClipboardManager
+    lateinit var clipData: ClipData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +97,27 @@ class MainActivity : AppCompatActivity() {
         }
 
         initInput()
+
+        clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+        Log.i("Saved", clipboardManager.primaryClip.toString())
+    }
+
+    private fun forbidActions(mEditText: TextView){
+        mEditText.customSelectionActionModeCallback = object : ActionMode.Callback{
+            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                return false
+            }
+
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                return false
+            }
+
+            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onDestroyActionMode(p0: ActionMode?) {}
+        }
     }
     private fun setButtonsListeners(){
         findViewById<Button>(R.id.btnPaste1).visibility = View.INVISIBLE
@@ -109,33 +136,50 @@ class MainActivity : AppCompatActivity() {
             findViewById<Button>(R.id.btnCopy1).setOnClickListener {
                 val res = findViewById<EditText>(R.id.etInput).text.toString()
                 if(res.isNotEmpty()){
-                    savedCopy = res
+                    clipData = ClipData.newPlainText("saved",res)
+                    clipboardManager.setPrimaryClip(clipData)
+                    Toast.makeText(this, "Copied", LENGTH_SHORT).show()
                 }
             }
 
             findViewById<Button>(R.id.btnPaste1).visibility = View.VISIBLE
             findViewById<Button>(R.id.btnPaste1).setOnClickListener {
-                inputFrom = savedCopy
-                input.setText(inputFrom, TextView.BufferType.EDITABLE)
+                val saved = clipboardManager.primaryClip
+                val item = saved?.getItemAt(0)
+
+                inputFrom = item?.text.toString()
+                input.text = inputFrom
+
                 isActiveInputFrom = true
                 (input as EditText).setSelection(inputFrom.length)
                 update()
+
+                Log.i("Paste", item?.text.toString())
             }
 
             findViewById<Button>(R.id.btnCopy).visibility = View.VISIBLE
             findViewById<Button>(R.id.btnCopy).setOnClickListener {
                 val res = findViewById<EditText>(R.id.etOutput).text.toString()
                 if(res.isNotEmpty()){
-                    savedCopy = res
+                    clipData = ClipData.newPlainText("saved", res)
+                    clipboardManager.setPrimaryClip(clipData)
+                    Toast.makeText(this, "Copied", LENGTH_SHORT).show()
+                    Log.i("Copy", res)
                 }
             }
 
             findViewById<Button>(R.id.btnPaste).visibility = View.VISIBLE
             findViewById<Button>(R.id.btnPaste).setOnClickListener {
-                inputTo = savedCopy
-                output.setText(inputTo, TextView.BufferType.EDITABLE)
+                val saved = clipboardManager.primaryClip
+                val item = saved?.getItemAt(0)
+
+                inputTo = item?.text.toString()
+                output.text = inputTo
+
                 isActiveInputTo = true
                 (output as EditText).setSelection(inputTo.length)
+
+                Log.i("Paste", item?.text.toString())
             }
 
             findViewById<Button>(R.id.btnNightMode).visibility = View.VISIBLE
@@ -157,6 +201,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun initInput(){
         val etInput = findViewById<TextView>(R.id.etInput)
+        forbidActions(etInput)
         etInput.hint = "0.0"
         etInput.text = ""
         etInput.showSoftInputOnFocus = false
@@ -168,6 +213,7 @@ class MainActivity : AppCompatActivity() {
         }}
 
         val etOutput = findViewById<TextView>(R.id.etOutput)
+        forbidActions(etOutput)
         etOutput.hint = "0.0"
         etOutput.text = ""
         etOutput.showSoftInputOnFocus = false
@@ -202,9 +248,11 @@ class MainActivity : AppCompatActivity() {
         inputTo = savedInstanceState.getString("inputTo").toString()
 
         input.setText(inputFrom, TextView.BufferType.EDITABLE)
-        output.setText(inputTo, TextView.BufferType.EDITABLE)
+        (input as EditText).setSelection(inputFrom.length)
 
-        savedCopy = savedInstanceState.getString("savedCopy").toString()
+        output.setText(inputTo, TextView.BufferType.EDITABLE)
+        (output as EditText).setSelection(inputTo.length)
+
         profMode = savedInstanceState.getBoolean("profMode")
     }
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
@@ -214,7 +262,6 @@ class MainActivity : AppCompatActivity() {
         savedInstanceState.putString("inputFrom", inputFrom)
         savedInstanceState.putString("inputTo", inputTo)
 
-        savedInstanceState.putString("savedCopy", savedCopy)
         savedInstanceState.putBoolean("profMode", profMode)
 
         savedInstanceState.putInt("opened_fragment", bottomNav.selectedItemId)
@@ -373,10 +420,10 @@ class MainActivity : AppCompatActivity() {
         input.text = inputFrom
         output.text = inputTo
 
-        if(isActiveInputFrom){
+        if (isActiveInputFrom) {
             (input as EditText).setSelection(inputFrom.length)
         }
-        if(isActiveInputTo){
+        if (isActiveInputTo) {
             (output as EditText).setSelection(inputTo.length)
         }
 
