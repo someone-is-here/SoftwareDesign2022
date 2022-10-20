@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
     private var isActiveInputTo = false
 
     private var profMode: Boolean = false
-
     private var nightMode: Boolean = false
 
     private val convertibleValues:Map<String, Double> = mapOf(
@@ -67,7 +66,6 @@ class MainActivity : AppCompatActivity() {
                     setChooseMenu(R.array.currency)
                     initInput()
                     return@setOnNavigationItemSelectedListener true
-                    //return@setOnNavigationItemReselectedListener
                 }
                 R.id.distance -> {
                     loadFragment(DistanceFragment())
@@ -99,7 +97,6 @@ class MainActivity : AppCompatActivity() {
         initInput()
 
         clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-        Log.i("Saved", clipboardManager.primaryClip.toString())
     }
 
     private fun forbidActions(mEditText: TextView){
