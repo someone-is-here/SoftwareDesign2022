@@ -1,17 +1,23 @@
 package com.example.converter
 
-import android.annotation.SuppressLint
-import android.graphics.PorterDuff
+import android.content.ClipData
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.text.ClipboardManager
 import android.util.Log
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNav : BottomNavigationView
@@ -28,9 +34,7 @@ class MainActivity : AppCompatActivity() {
     private var isActiveInputFrom = false
     private var isActiveInputTo = false
 
-    private var savedCopy: String = ""
     private var profMode: Boolean = false
-
     private var nightMode: Boolean = false
 
     private val convertibleValues:Map<String, Double> = mapOf(
@@ -45,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         "st" to 6.3503, "lb" to 0.4536
     )
 
+    private lateinit var clipboardManager: android.content.ClipboardManager
+    lateinit var clipData: ClipData
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,27 +60,22 @@ class MainActivity : AppCompatActivity() {
         bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
 
         bottomNav.setOnNavigationItemSelectedListener {
-            Log.i("mko","bottomNavListener" + it.itemId.toString())
             when (it.itemId) {
                 R.id.currency -> {
                     loadFragment(CurrencyFragment())
                     setChooseMenu(R.array.currency)
-                    Log.i("mko", "Load chosen currency")
                     initInput()
                     return@setOnNavigationItemSelectedListener true
-                    //return@setOnNavigationItemReselectedListener
                 }
                 R.id.distance -> {
                     loadFragment(DistanceFragment())
                     setChooseMenu(R.array.distance)
-                    Log.i("mko", "Load chosen distance")
                     initInput()
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.weight -> {
                     loadFragment(WeightFragment())
                     setChooseMenu(R.array.weight)
-                    Log.i("mko", "Load chosen weight")
                     initInput()
                     return@setOnNavigationItemSelectedListener true
                 }
@@ -88,16 +90,32 @@ class MainActivity : AppCompatActivity() {
         loadFragment(CurrencyFragment())
         setChooseMenu(R.array.currency)
 
-        Log.i("mko", "Load default currency")
-
         if(savedInstanceState != null){
-            Log.i("mko", "NOT NULL STATE" + savedInstanceState.getInt("opened_fragment"))
             bottomNav.selectedItemId = savedInstanceState.getInt("opened_fragment")
         }
 
         initInput()
+
+        clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
     }
 
+    private fun forbidActions(mEditText: TextView){
+        mEditText.customSelectionActionModeCallback = object : ActionMode.Callback{
+            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                return false
+            }
+
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                return false
+            }
+
+            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onDestroyActionMode(p0: ActionMode?) {}
+        }
+    }
     private fun setButtonsListeners(){
         findViewById<Button>(R.id.btnPaste1).visibility = View.INVISIBLE
         findViewById<Button>(R.id.btnCopy1).visibility = View.INVISIBLE
@@ -115,33 +133,50 @@ class MainActivity : AppCompatActivity() {
             findViewById<Button>(R.id.btnCopy1).setOnClickListener {
                 val res = findViewById<EditText>(R.id.etInput).text.toString()
                 if(res.isNotEmpty()){
-                    savedCopy = res
+                    clipData = ClipData.newPlainText("saved",res)
+                    clipboardManager.setPrimaryClip(clipData)
+                    Toast.makeText(this, "Copied", LENGTH_SHORT).show()
                 }
             }
 
             findViewById<Button>(R.id.btnPaste1).visibility = View.VISIBLE
             findViewById<Button>(R.id.btnPaste1).setOnClickListener {
-                inputFrom = savedCopy
-                input.setText(inputFrom, TextView.BufferType.EDITABLE)
+                val saved = clipboardManager.primaryClip
+                val item = saved?.getItemAt(0)
+
+                inputFrom = item?.text.toString()
+                input.text = inputFrom
+
                 isActiveInputFrom = true
                 (input as EditText).setSelection(inputFrom.length)
                 update()
+
+                Log.i("Paste", item?.text.toString())
             }
 
             findViewById<Button>(R.id.btnCopy).visibility = View.VISIBLE
             findViewById<Button>(R.id.btnCopy).setOnClickListener {
                 val res = findViewById<EditText>(R.id.etOutput).text.toString()
                 if(res.isNotEmpty()){
-                    savedCopy = res
+                    clipData = ClipData.newPlainText("saved", res)
+                    clipboardManager.setPrimaryClip(clipData)
+                    Toast.makeText(this, "Copied", LENGTH_SHORT).show()
+                    Log.i("Copy", res)
                 }
             }
 
             findViewById<Button>(R.id.btnPaste).visibility = View.VISIBLE
             findViewById<Button>(R.id.btnPaste).setOnClickListener {
-                inputTo = savedCopy
-                output.setText(inputTo, TextView.BufferType.EDITABLE)
+                val saved = clipboardManager.primaryClip
+                val item = saved?.getItemAt(0)
+
+                inputTo = item?.text.toString()
+                output.text = inputTo
+
                 isActiveInputTo = true
                 (output as EditText).setSelection(inputTo.length)
+
+                Log.i("Paste", item?.text.toString())
             }
 
             findViewById<Button>(R.id.btnNightMode).visibility = View.VISIBLE
@@ -163,6 +198,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun initInput(){
         val etInput = findViewById<TextView>(R.id.etInput)
+        forbidActions(etInput)
         etInput.hint = "0.0"
         etInput.text = ""
         etInput.showSoftInputOnFocus = false
@@ -174,6 +210,7 @@ class MainActivity : AppCompatActivity() {
         }}
 
         val etOutput = findViewById<TextView>(R.id.etOutput)
+        forbidActions(etOutput)
         etOutput.hint = "0.0"
         etOutput.text = ""
         etOutput.showSoftInputOnFocus = false
@@ -208,9 +245,11 @@ class MainActivity : AppCompatActivity() {
         inputTo = savedInstanceState.getString("inputTo").toString()
 
         input.setText(inputFrom, TextView.BufferType.EDITABLE)
-        output.setText(inputTo, TextView.BufferType.EDITABLE)
+        (input as EditText).setSelection(inputFrom.length)
 
-        savedCopy = savedInstanceState.getString("savedCopy").toString()
+        output.setText(inputTo, TextView.BufferType.EDITABLE)
+        (output as EditText).setSelection(inputTo.length)
+
         profMode = savedInstanceState.getBoolean("profMode")
     }
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
@@ -220,7 +259,6 @@ class MainActivity : AppCompatActivity() {
         savedInstanceState.putString("inputFrom", inputFrom)
         savedInstanceState.putString("inputTo", inputTo)
 
-        savedInstanceState.putString("savedCopy", savedCopy)
         savedInstanceState.putBoolean("profMode", profMode)
 
         savedInstanceState.putInt("opened_fragment", bottomNav.selectedItemId)
@@ -274,12 +312,10 @@ class MainActivity : AppCompatActivity() {
     }
     private fun update(){
         if(inputFrom.isNotEmpty() && isActiveInputFrom){
-            val res = (inputFrom.toDouble() * convertibleValues[convertFrom]!!) / (convertibleValues[convertTo]!!)
-            inputTo = res.toString()
+            Formatter.BigDecimalLayoutForm.SCIENTIFIC
+            val res = (inputFrom.toBigDecimal()) * (convertibleValues[convertFrom]!! / convertibleValues[convertTo]!!).toBigDecimal()
+            inputTo = res.toPlainString()
             output.text = inputTo
-            if(res >= 10000000){
-                Toast.makeText(this, "Possible loss of accuracy", LENGTH_LONG).show()
-            }
         }
     }
     fun onDigit(view: View) {
@@ -348,6 +384,9 @@ class MainActivity : AppCompatActivity() {
         if(isActiveInputTo){
             inputTo = ""
             output.text = inputTo
+            isActiveInputFrom = true
+            update()
+            isActiveInputFrom = false
         }
     }
     fun onDelete(view: View) {
@@ -367,6 +406,9 @@ class MainActivity : AppCompatActivity() {
         update()
     }
     fun onSwap(view: View) {
+        isActiveInputFrom = true
+        isActiveInputTo = false
+
         val res = inputFrom
 
         inputFrom = inputTo
@@ -375,15 +417,13 @@ class MainActivity : AppCompatActivity() {
         input.text = inputFrom
         output.text = inputTo
 
-        if(isActiveInputFrom){
+        if (isActiveInputFrom) {
             (input as EditText).setSelection(inputFrom.length)
         }
-        if(isActiveInputTo){
+        if (isActiveInputTo) {
             (output as EditText).setSelection(inputTo.length)
         }
 
         update()
     }
 }
-
-// TODO: Restriction on digits?

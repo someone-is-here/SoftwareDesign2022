@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home"  />
+    <item
+        android:id="@+id/currency"
+        android:icon="@drawable/ic_currency_converter"
+        android:title="Currency" />
+    <item
+        android:id="@+id/weight"
+        android:icon="@drawable/ic_weight"
+        android:title="Weight" />
+    <item
+        android:id="@+id/distance"
+        android:icon="@drawable/ic_distance"
+        android:title="Distance" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Settings" />
+</menu>
