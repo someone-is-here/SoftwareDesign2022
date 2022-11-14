@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.example.navbardemp.app-mergeDebugResources-44:/layout/activity_main.xml",
+        "source": "com.example.navbardemp.app-main-47:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.navbardemp.app-mergeDebugResources-44:/layout/fragment_home.xml",
+        "source": "com.example.navbardemp.app-main-47:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.example.navbardemp.app-mergeDebugResources-44:/layout/fragment_second.xml",
+        "source": "com.example.navbardemp.app-main-47:/layout/fragment_second.xml"
+    }
+]
