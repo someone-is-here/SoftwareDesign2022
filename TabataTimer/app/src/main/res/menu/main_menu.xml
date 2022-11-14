@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+    android:id="@+id/SwitchTheme"
+    android:title="@string/theme"
+    app:showAsAction="never">
+    <menu>
+    <item
+        android:id="@+id/NightMode"
+        android:title="@string/night_mode"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/LightMode"
+        android:title="@string/light_mode"
+        app:showAsAction="never"/>
+</menu>
+</item>
+    <item
+        android:id="@+id/SwitchLanguage"
+        android:title="@string/language"
+        app:showAsAction="never">
+        <menu>
+            <item
+             android:id="@+id/Belarusian"
+                android:title="@string/belarusian"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/English"
+                android:title="@string/english"
+                app:showAsAction="never"/>
+<!--            <item-->
+<!--                android:id="@+id/Russian"-->
+<!--                android:title="Russian"-->
+<!--                app:showAsAction="never"/>-->
+        </menu>
+    </item>
+    <item
+        android:id="@+id/SwitchFont"
+        android:title="@string/font"
+        app:showAsAction="never">
+    <menu>
+        <item
+            android:id="@+id/BigFont"
+            android:title="@string/large_font"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/NormalFont"
+            android:title="@string/normal_font"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/SmallFont"
+            android:title="@string/small_font"
+            app:showAsAction="never"/>
+    </menu>
+    </item>
+    <item
+        android:id="@+id/ClearData"
+        android:title="Clear data"
+        app:showAsAction="never"/>
+</menu>
