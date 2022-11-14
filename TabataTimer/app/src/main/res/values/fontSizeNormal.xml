@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="textSizeName">
+        <item name="android:textSize">30sp</item>
+    </style>
+    <style name="textSizeTitle">
+        <item name="android:textSize">36sp</item>
+    </style>
+    <style name="textSizeButtons">
+        <item name="android:textSize">22sp</item>
+    </style>
+    <style name="textSizeTime">
+        <item name="android:textSize">120sp</item>
+    </style>
+</resources>

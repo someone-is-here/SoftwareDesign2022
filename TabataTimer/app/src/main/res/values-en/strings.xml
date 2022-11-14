@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Tabata Timer</string>
+    <string name="add">+</string>
+    <string name="decrement">-</string>
+    <string name="confirm">confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="Name">Name</string>
+    <string name="PickColor">Pick color</string>
+    <string name="SelectedColor">Selected Color:</string>
+    <string name="Submit">Submit</string>
+    <string name="Start">Start</string>
+    <string name="RepeatsLeft">Repeats left:</string>
+    <string name="Description">Description</string>
+    <string name="time">00:00:00</string>
+    <string name="theme">Theme</string>
+    <string name="night_mode">Night mode</string>
+    <string name="light_mode">Light mode</string>
+    <string name="language">Language</string>
+    <string name="belarusian">Беларуская</string>
+    <string name="english">English</string>
+    <string name="font">Font</string>
+    <string name="large_font">Large font</string>
+    <string name="normal_font">Normal font</string>
+    <string name="small_font">Small font</string>
+    <string name="WarningTime">Time must be more than 0</string>
+    <string name="SuccessfullyRemoved">Successfully removed!</string>
+    <string name="TrainingDone">Training done successfully!</string>
+    <string name="VolumeMode">Volume mode</string>
+    <string name="SilentMode">Silent mode</string>
+    <string name="CantStartTimer">Can\'t start! You don\'t create any timers!</string>
+    <string-array name="TimerVariants">
+        <item>Workout</item>
+        <item>Rest</item>
+        <item>Warm-out</item>
+        <item>Cool down</item>
+    </string-array>
+</resources>

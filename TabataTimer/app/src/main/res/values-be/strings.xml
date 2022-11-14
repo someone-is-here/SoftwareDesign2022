@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Таймер Табата</string>
+    <string name="add">+</string>
+    <string name="decrement">-</string>
+    <string name="confirm">пацвердзіць</string>
+    <string name="cancel">адмяніць</string>
+    <string name="Name">Імя</string>
+    <string name="PickColor">Выберыце колер</string>
+    <string name="SelectedColor">Выбраны колер:</string>
+    <string name="Submit">Пацвердзiць</string>
+    <string name="Start">Пачаць</string>
+    <string name="RepeatsLeft">Паўтораў засталося:</string>
+    <string name="Description">Апісанне</string>
+    <string name="time">00:00:00</string>
+    <string name="theme">Тэма</string>
+    <string name="night_mode">Начны рэжым</string>
+    <string name="light_mode">Светлы рэжым</string>
+    <string name="language">Мова</string>
+    <string name="belarusian">Беларуская</string>
+    <string name="english">English</string>
+    <string name="font">Шрыфт</string>
+    <string name="large_font">Буйны шрыфт</string>
+    <string name="normal_font">Звычайны шрыфт</string>
+    <string name="small_font">Дробны шрыфт</string>
+    <string name="WarningTime">Час павінен быць больш за 0</string>
+    <string name="SuccessfullyRemoved">Паспяхова выдалена!</string>
+    <string name="TrainingDone">Трэнiроўка прайшла паспяхова!</string>
+    <string name="VolumeMode">Гучны рэжым</string>
+    <string name="SilentMode">Ціхі рэжым</string>
+    <string name="CantStartTimer">Немагчыма запусцiць таймер, таму што нiводнага не было создана!</string>
+    <string-array name="TimerVariants">
+        <item>Трэніроўка</item>
+        <item>Адпачынак</item>
+        <item>Размінка</item>
+        <item>Замінка</item>
+    </string-array>
+</resources>

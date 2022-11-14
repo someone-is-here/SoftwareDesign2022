@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp">
+
+            <View
+                android:id="@+id/vTimerColor"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="3"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/tvNameOfTimer"
+                android:layout_width="251dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:theme="@style/textSizeButtons"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/btnIncrementTime"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnIncrementTime"
+                app:layout_constraintVertical_bias="0.827" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="78dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:theme="@style/textSizeButtons"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnIncrementRepeats"
+            app:layout_constraintTop_toTopOf="@+id/btnIncrementRepeats">
+
+            <ImageButton
+                android:id="@+id/btnDecrementRepeats"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/round_button"
+                android:src="@drawable/ic_decrement"
+                app:layout_constraintBottom_toBottomOf="@+id/tvTimerRepeats"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.350"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvTimerRepeats"
+                app:layout_constraintVertical_bias="0.775"
+                tools:layout_conversion_absoluteHeight="50dp"
+                tools:layout_conversion_absoluteWidth="50dp" />
+
+            <ImageButton
+                android:id="@+id/btnDeleteTraining"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@color/purple_200"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintBottom_toBottomOf="@+id/tvTimerRepeats"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.07"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvTimerRepeats"
+                app:layout_constraintVertical_bias="0.75"
+                tools:layout_conversion_absoluteHeight="50dp"
+                tools:layout_conversion_absoluteWidth="50dp" />
+
+            <ImageButton
+                android:id="@+id/btnUpdateTraining"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@color/purple_200"
+                android:src="@drawable/ic_update"
+                app:layout_constraintBottom_toBottomOf="@+id/btnDeleteTraining"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.93"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnDeleteTraining"
+                app:layout_constraintVertical_bias="0.75"
+                tools:layout_conversion_absoluteHeight="50dp"
+                tools:layout_conversion_absoluteWidth="50dp" />
+
+            <TextView
+                android:id="@+id/tvTimerRepeats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/btnIncrementRepeats"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.539"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnIncrementRepeats"
+                app:layout_constraintVertical_bias="0.827"
+                tools:layout_conversion_absoluteHeight="47dp"
+                tools:layout_conversion_absoluteWidth="192dp" />
+
+            <ImageButton
+                android:id="@+id/btnIncrementRepeats"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/round_button"
+                android:src="@drawable/ic_increment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.725"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.775"
+                tools:layout_conversion_absoluteHeight="50dp"
+                tools:layout_conversion_absoluteWidth="50dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
