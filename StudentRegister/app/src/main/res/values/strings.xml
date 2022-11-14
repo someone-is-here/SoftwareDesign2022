@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">StudentRegister</string>
-    <string name="student_name_hint">Student\'s name</string>
-    <string name="student_email_hint">Student\'s email</string>
-</resources>
